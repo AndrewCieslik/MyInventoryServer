@@ -1,19 +1,23 @@
 package com.inventory.myinventory.controllers;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 
-@RestController
+@Controller
 public class MainPageController {
     @RequestMapping("/main")
     public String hello(){
-        return "<html><body><h1>Hello World</h1><form action=\"/executeQuery\" method=\"post\">" +
-                "<input type=\"text\" name=\"name\" placeholder=\"Enter Name\">" +
-                "<button type=\"submit\">Execute Query</button></form></body></html>";
+        return "main";
     }
 
     @PostMapping("/executeQuery")
@@ -33,10 +37,15 @@ public class MainPageController {
             statement.setString(1, name);
             statement.executeUpdate();
 
-            return "Query executed successfully!";
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            return "Failed to execute query: " + e.getMessage();
         }
+        return "main";
+    }
+    // Metoda do wczytywania pliku HTML z zasobów aplikacji
+    private String loadHTML(String fileName) throws IOException {
+        Resource resource = new ClassPathResource(fileName);
+        byte[] bytes = Files.readAllBytes(Paths.get(resource.getURI()));
+        return new String(bytes);
     }
 }
