@@ -12,7 +12,7 @@ public class Demo {
         String password = "";
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection is Successful to the database" + url);
             String query = "Insert into student(id, name) values(1, 'Robert')";
