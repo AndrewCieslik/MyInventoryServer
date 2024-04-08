@@ -5,7 +5,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
@@ -41,11 +40,5 @@ public class MainPageController {
             e.printStackTrace();
         }
         return "main";
-    }
-    // Metoda do wczytywania pliku HTML z zasobów aplikacji
-    private String loadHTML(String fileName) throws IOException {
-        Resource resource = new ClassPathResource(fileName);
-        byte[] bytes = Files.readAllBytes(Paths.get(resource.getURI()));
-        return new String(bytes);
     }
 }
