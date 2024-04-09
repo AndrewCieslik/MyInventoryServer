@@ -74,6 +74,22 @@ public class MainPageController {
         return "main";
     }
 
+    @PostMapping("/assignGoodsQuery")
+    public String assignGoodsQuery(@RequestParam("user_id") String user_id, @RequestParam("id") String id) {
+        try (Connection connection = getConnection()) {
+
+            String insertQuery = "INSERT INTO assigned_goods(user_id, id) VALUES(?, ?)";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                insertStatement.setString(1, user_id);
+                insertStatement.setString(2, id);
+                insertStatement.executeUpdate();
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return "main";
+    }
+
     private int getNextId(Connection connection) throws SQLException {
         String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
         try (PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
