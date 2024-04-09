@@ -9,42 +9,34 @@ import java.sql.*;
 
 @Controller
 public class MainPageController {
+
+    private final String url = "jdbc:mysql://localhost:3306/test";
+    private final String user = "root";
+    private final String password = "";
+
+    private Connection getConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(url, user, password);
+        System.out.println("Connection is Successful to the database " + url);
+        return connection;
+    }
+
     @RequestMapping("/main")
-    public String hello(){
+    public String showMainPage() {
         return "main";
     }
 
     @PostMapping("/executeQuery")
-    public String executeQuery(@RequestParam("name") String name){
-        try {
-            String url = "jdbc:mysql://localhost:3306/test";
-            String user = "root";
-            String password = "";
+    public String executeQuery(@RequestParam("name") String name) {
+        try (Connection connection = getConnection()) {
+            int nextId = getNextId(connection);
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection is Successful to the database" + url);
-
-            // Pobierz najwyższe ID z tabeli student
-            String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
-            PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
-            ResultSet resultSet = getMaxIdStatement.executeQuery();
-
-            int nextId = 1; // Domyślne ID, jeśli tabela jest pusta
-
-            if (resultSet.next()) {
-                // Jeśli są wyniki, pobierz najwyższe ID i zwiększ je o jeden
-                int maxId = resultSet.getInt(1);
-                nextId = maxId + 1;
-            }
-
-            // Użyto parametryzowanego zapytania, aby uniknąć ataków SQL Injection
             String insertQuery = "INSERT INTO inventory(id, name) VALUES(?, ?)";
-            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
-            insertStatement.setInt(1, nextId); // Ustaw ID na kolejne dostępne
-            insertStatement.setString(2, name);
-            insertStatement.executeUpdate();
-
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                insertStatement.setInt(1, nextId);
+                insertStatement.setString(2, name);
+                insertStatement.executeUpdate();
+            }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -52,24 +44,27 @@ public class MainPageController {
     }
 
     @PostMapping("/eraseQuery")
-    public String eraseQuery(){
-        try {
-            String url = "jdbc:mysql://localhost:3306/test";
-            String user = "root";
-            String password = "";
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection is Successful to the database" + url);
-
+    public String eraseQuery() {
+        try (Connection connection = getConnection()) {
             String query = "DELETE from inventory";
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(query);
-
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(query);
+            }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return "main";
     }
 
+    private int getNextId(Connection connection) throws SQLException {
+        String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
+        try (PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
+             ResultSet resultSet = getMaxIdStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1) + 1;
+            } else {
+                return 1;
+            }
+        }
+    }
 }
