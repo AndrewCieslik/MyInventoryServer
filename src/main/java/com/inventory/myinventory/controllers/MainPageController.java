@@ -26,7 +26,7 @@ public class MainPageController {
             System.out.println("Connection is Successful to the database" + url);
 
             // Pobierz najwyższe ID z tabeli student
-            String getMaxIdQuery = "SELECT MAX(id) FROM student";
+            String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
             PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
             ResultSet resultSet = getMaxIdStatement.executeQuery();
 
@@ -39,7 +39,7 @@ public class MainPageController {
             }
 
             // Użyto parametryzowanego zapytania, aby uniknąć ataków SQL Injection
-            String insertQuery = "INSERT INTO student(id, name) VALUES(?, ?)";
+            String insertQuery = "INSERT INTO inventory(id, name) VALUES(?, ?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setInt(1, nextId); // Ustaw ID na kolejne dostępne
             insertStatement.setString(2, name);
@@ -50,4 +50,26 @@ public class MainPageController {
         }
         return "main";
     }
+
+    @PostMapping("/eraseQuery")
+    public String eraseQuery(){
+        try {
+            String url = "jdbc:mysql://localhost:3306/test";
+            String user = "root";
+            String password = "";
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection is Successful to the database" + url);
+
+            String query = "DELETE from inventory";
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return "main";
+    }
+
 }
