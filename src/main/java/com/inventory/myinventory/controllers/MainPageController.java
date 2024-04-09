@@ -26,8 +26,8 @@ public class MainPageController {
         return "main";
     }
 
-    @PostMapping("/executeQuery")
-    public String executeQuery(@RequestParam("name") String name) {
+    @PostMapping("/insertGoodsQuery")
+    public String insertGoodsQuery(@RequestParam("name") String name) {
         try (Connection connection = getConnection()) {
             int nextId = getNextId(connection);
 
@@ -43,12 +43,30 @@ public class MainPageController {
         return "main";
     }
 
-    @PostMapping("/eraseQuery")
+    @PostMapping("/eraseGoodsQuery")
     public String eraseQuery() {
         try (Connection connection = getConnection()) {
             String query = "DELETE from inventory";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(query);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return "main";
+    }
+
+    @PostMapping("/insertUserQuery")
+    public String insertUserQuery(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+        try (Connection connection = getConnection()) {
+            int nextId = getNextId(connection);
+
+            String insertQuery = "INSERT INTO users(user_id, LastName, FirstName) VALUES(?, ?, ?)";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                insertStatement.setInt(1, nextId);
+                insertStatement.setString(2, lastName);
+                insertStatement.setString(3, firstName);
+                insertStatement.executeUpdate();
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

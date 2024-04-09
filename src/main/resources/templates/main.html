@@ -1,15 +1,25 @@
 <html>
 <body>
 <h1>My Inventory</h1>
+<h2>Goods:</h2>
 
-<form action="/executeQuery" method="post">
-    <input type="text" name="name" placeholder="Enter Name">
-    <button type="submit">Execute Query</button>
+<form action="/insertGoodsQuery" method="post">
+    <input type="text" name="name" placeholder="New Item">
+    <button type="submit">Add new item</button>
 </form>
 
-<form action="/eraseQuery" method="post">
-    <button type="submit">Delete Entire Database</button>
+<form action="/eraseGoodsQuery" method="post">
+    <button type="submit">Delete All Goods</button>
 </form>
+
+<h2>Users:</h2>
+<h3>Add new employee: </h3>
+<form action="/insertUserQuery" method="post">
+    <input type="text" name="lastName" placeholder="Last name">
+    <input type="text" name="firstName" placeholder="First name">
+    <button type="submit">Add new user</button>
+</form>
+
 
 </body>
 </html>
