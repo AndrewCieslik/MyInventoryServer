@@ -25,11 +25,25 @@ public class MainPageController {
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection is Successful to the database" + url);
 
-            // Użyj parametryzowanego zapytania, aby uniknąć ataków SQL Injection
-            String query = "INSERT INTO student(id, name) VALUES(1, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, name);
-            statement.executeUpdate();
+            // Pobierz najwyższe ID z tabeli student
+            String getMaxIdQuery = "SELECT MAX(id) FROM student";
+            PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
+            ResultSet resultSet = getMaxIdStatement.executeQuery();
+
+            int nextId = 1; // Domyślne ID, jeśli tabela jest pusta
+
+            if (resultSet.next()) {
+                // Jeśli są wyniki, pobierz najwyższe ID i zwiększ je o jeden
+                int maxId = resultSet.getInt(1);
+                nextId = maxId + 1;
+            }
+
+            // Użyto parametryzowanego zapytania, aby uniknąć ataków SQL Injection
+            String insertQuery = "INSERT INTO student(id, name) VALUES(?, ?)";
+            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+            insertStatement.setInt(1, nextId); // Ustaw ID na kolejne dostępne
+            insertStatement.setString(2, name);
+            insertStatement.executeUpdate();
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
