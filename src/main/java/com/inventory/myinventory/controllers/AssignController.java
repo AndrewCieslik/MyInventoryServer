@@ -1,13 +1,12 @@
 package com.inventory.myinventory.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
+@Controller
 public class AssignController {
     private final String url = "jdbc:mysql://localhost:3306/test";
     private final String user = "root";
