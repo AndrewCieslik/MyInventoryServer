@@ -1,12 +1,14 @@
 package com.inventory.myinventory.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.*;
 
+@Controller
 public class InventoryController {
+
     private final String url = "jdbc:mysql://localhost:3306/test";
     private final String user = "root";
     private final String password = "";
@@ -16,11 +18,6 @@ public class InventoryController {
         Connection connection = DriverManager.getConnection(url, user, password);
         System.out.println("Connection is Successful to the database " + url);
         return connection;
-    }
-
-    @RequestMapping("/main")
-    public String showMainPage() {
-        return "main";
     }
 
     @PostMapping("/insertGoodsQuery")
@@ -38,20 +35,6 @@ public class InventoryController {
             e.printStackTrace();
         }
         return "redirect:/main";
-    }
-
-
-    @PostMapping("/eraseGoodsQuery")
-    public String eraseQuery() {
-        try (Connection connection = getConnection()) {
-            String query = "DELETE from inventory";
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate(query);
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        return "main";
     }
 
     private int getNextId(Connection connection) throws SQLException {
