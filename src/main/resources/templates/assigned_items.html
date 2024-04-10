@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assigned Items</title>
+</head>
+<body>
+<h1>Items Assigned to User</h1>
+<ul>
+    <!-- Use Thymeleaf to iterate over assignedItems list and display each item -->
+    <li th:each="item : ${assignedItems}" th:text="${item}"></li>
+</ul>
+</body>
+</html>

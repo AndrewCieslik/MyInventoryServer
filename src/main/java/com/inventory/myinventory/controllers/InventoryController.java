@@ -14,8 +14,8 @@ public class InventoryController {
     @Autowired
     private DatabaseConnection databaseConnection;
 
-    @PostMapping("/insertGoodsQuery")
-    public String insertGoodsQuery(@RequestParam("name") String name) {
+    @PostMapping("/insertGoods")
+    public String insertGoods(@RequestParam("name") String name) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
                 databaseConnection.getUsername(),
                 databaseConnection.getPassword())) {

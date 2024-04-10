@@ -1,4 +1,3 @@
-
 package com.inventory.myinventory.controllers;
 
 import com.inventory.myinventory.model.DatabaseConnection;
@@ -15,8 +14,8 @@ public class UserController {
     @Autowired
     private DatabaseConnection databaseConnection;
 
-    @PostMapping("/insertUserQuery")
-    public String insertUserQuery(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+    @PostMapping("/insertUser")
+    public String insertUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
                 databaseConnection.getUsername(),
                 databaseConnection.getPassword())) {
@@ -27,6 +26,24 @@ public class UserController {
                 insertStatement.setInt(1, nextId);
                 insertStatement.setString(2, lastName);
                 insertStatement.setString(3, firstName);
+                insertStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/main";
+    }
+
+    @PostMapping("/eraseAllUsers")
+    public String insertUser() {
+        try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
+                databaseConnection.getUsername(),
+                databaseConnection.getPassword())) {
+            int nextId = getNextId(connection);
+
+            String insertQuery = "DELETE from users";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+
                 insertStatement.executeUpdate();
             }
         } catch (SQLException e) {

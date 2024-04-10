@@ -8,28 +8,38 @@
 <h1>My Inventory</h1>
 <h2>Goods:</h2>
 
-<form action="/insertGoodsQuery" method="post">
+<form action="/insertGoods" method="post">
     <input type="text" name="name" placeholder="New Item">
     <button type="submit">Add new item</button>
 </form>
 
-<form action="/eraseGoodsQuery" method="post">
+<form action="/eraseGoods" method="post">
     <button type="submit">Delete All Goods</button>
 </form>
 
 <h2>Users:</h2>
 <h3>Add new user: </h3>
-<form action="/insertUserQuery" method="post">
+<form action="/insertUser" method="post">
     <input type="text" name="lastName" placeholder="Last name">
     <input type="text" name="firstName" placeholder="First name">
     <button type="submit">Add new user</button>
 </form>
 
+<form action="/eraseAllUsers" method="post">
+    <button type="submit">Delete All Users</button>
+</form>
+
 <h2>Assign goods to the user:</h2>
-<form action="/assignGoodsQuery" method="post">
+<form action="/assignGoods" method="post">
     <input type="text" name="user_id" placeholder="User ID">
     <input type="text" name="id" placeholder="Product ID">
     <button type="submit">Assign material</button>
+</form>
+
+<h2>Show items assigned to user:</h2>
+<form action="/showAssignedItems" method="post">
+    <input type="text" name="user_id" placeholder="User ID">
+    <button type="submit">Show Items</button>
 </form>
 </body>
 </html>
