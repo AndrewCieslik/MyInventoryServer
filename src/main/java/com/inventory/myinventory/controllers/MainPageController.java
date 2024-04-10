@@ -40,55 +40,17 @@ public class MainPageController {
 //        } catch (ClassNotFoundException | SQLException e) {
 //            e.printStackTrace();
 //        }
-//        return "main";
+//        return "redirect:/main";
 //    }
-
-    @PostMapping("/eraseGoodsQuery")
-    public String eraseQuery() {
-        try (Connection connection = getConnection()) {
-            String query = "DELETE from inventory";
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate(query);
+    private int getNextId(Connection connection) throws SQLException {
+        String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
+        try (PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
+             ResultSet resultSet = getMaxIdStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1) + 1;
+            } else {
+                return 1;
             }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
-        return "main";
     }
-
-//    @PostMapping("/insertUserQuery")
-//    public String insertUserQuery(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-//        try (Connection connection = getConnection()) {
-//            int nextId = getNextId(connection);
-//
-//            String insertQuery = "INSERT INTO users(user_id, LastName, FirstName) VALUES(?, ?, ?)";
-//            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-//                insertStatement.setInt(1, nextId);
-//                insertStatement.setString(2, lastName);
-//                insertStatement.setString(3, firstName);
-//                insertStatement.executeUpdate();
-//            }
-//        } catch (ClassNotFoundException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return "main";
-//    }
-
-    @PostMapping("/assignGoodsQuery")
-    public String assignGoodsQuery(@RequestParam("user_id") String user_id, @RequestParam("id") String id) {
-        try (Connection connection = getConnection()) {
-
-            String insertQuery = "INSERT INTO assigned_goods(user_id, id) VALUES(?, ?)";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-                insertStatement.setString(1, user_id);
-                insertStatement.setString(2, id);
-                insertStatement.executeUpdate();
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        return "main";
-    }
-
-
 }

@@ -1,13 +1,12 @@
 package com.inventory.myinventory.controllers;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.*;
 
-@Controller
-public class UserController {
-
+public class InventoryController {
     private final String url = "jdbc:mysql://localhost:3306/test";
     private final String user = "root";
     private final String password = "";
@@ -19,22 +18,40 @@ public class UserController {
         return connection;
     }
 
-    @PostMapping("/insertUserQuery")
-    public String insertUserQuery(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+    @RequestMapping("/main")
+    public String showMainPage() {
+        return "main";
+    }
+
+    @PostMapping("/insertGoodsQuery")
+    public String insertGoodsQuery(@RequestParam("name") String name) {
         try (Connection connection = getConnection()) {
             int nextId = getNextId(connection);
 
-            String insertQuery = "INSERT INTO users(user_id, LastName, FirstName) VALUES(?, ?, ?)";
+            String insertQuery = "INSERT INTO inventory(id, name) VALUES(?, ?)";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
-                insertStatement.setString(2, lastName);
-                insertStatement.setString(3, firstName);
+                insertStatement.setString(2, name);
                 insertStatement.executeUpdate();
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return "redirect:/main";
+    }
+
+
+    @PostMapping("/eraseGoodsQuery")
+    public String eraseQuery() {
+        try (Connection connection = getConnection()) {
+            String query = "DELETE from inventory";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(query);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return "main";
     }
 
     private int getNextId(Connection connection) throws SQLException {
