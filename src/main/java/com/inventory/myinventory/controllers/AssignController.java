@@ -36,14 +36,14 @@ public class AssignController {
     @PostMapping("/showAssignedItems")
     public String showAssignedItems(@RequestParam("user_id") int userId, Model model) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(), databaseConnection.getUsername(), databaseConnection.getPassword())) {
-            String selectQuery = "SELECT * FROM assigned_goods WHERE user_id = ?";
+            String selectQuery = "SELECT inventory.Name FROM assigned_goods INNER JOIN inventory ON assigned_goods.id = inventory.id WHERE assigned_goods.user_id = ?";
             try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
                 selectStatement.setInt(1, userId);
                 ResultSet resultSet = selectStatement.executeQuery();
 
                 List<String> assignedItems = new ArrayList<>();
                 while (resultSet.next()) {
-                    assignedItems.add(resultSet.getString("id"));
+                    assignedItems.add(resultSet.getString("Name"));
                 }
                 model.addAttribute("assignedItems", assignedItems);
             }
@@ -52,4 +52,5 @@ public class AssignController {
         }
         return "assigned_items"; // Assuming you have a template named assigned_items.html to display the list
     }
+
 }
