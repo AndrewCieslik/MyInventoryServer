@@ -21,7 +21,7 @@ public class UserController {
                 databaseConnection.getPassword())) {
             int nextId = getNextId(connection);
 
-            String insertQuery = "INSERT INTO users(user_id, LastName, FirstName) VALUES(?, ?, ?)";
+            String insertQuery = "INSERT INTO users(user_id, lastName, firstName) VALUES(?, ?, ?)";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
                 insertStatement.setString(2, lastName);
