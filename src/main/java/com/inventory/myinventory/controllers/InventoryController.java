@@ -21,7 +21,7 @@ public class InventoryController {
                 databaseConnection.getPassword())) {
             int nextId = getNextId(connection);
 
-            String insertQuery = "INSERT INTO inventory(id, name) VALUES(?, ?)";
+            String insertQuery = "INSERT INTO regions(region_id, region_name) VALUES(?, ?)";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
                 insertStatement.setString(2, name);
@@ -34,7 +34,7 @@ public class InventoryController {
     }
 
     private int getNextId(Connection connection) throws SQLException {
-        String getMaxIdQuery = "SELECT MAX(id) FROM inventory";
+        String getMaxIdQuery = "SELECT MAX(region_id) FROM regions";
         try (PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
              ResultSet resultSet = getMaxIdStatement.executeQuery()) {
             if (resultSet.next()) {
