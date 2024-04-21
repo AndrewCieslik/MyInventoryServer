@@ -50,7 +50,7 @@ public class AssignController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "assigned_items"; // Assuming you have a template named assigned_items.html to display the list
+        return "assigned_items";
     }
 
 }
