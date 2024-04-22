@@ -15,27 +15,22 @@ public class UserController {
     private DatabaseConnection databaseConnection;
 
     @PostMapping("/insertUser")
-    public String insertUser(@RequestParam("first_name") String first_name, @RequestParam("last_name") String last_name) {
+    public String insertUser(@RequestParam("first_name") String first_name, @RequestParam("last_name") String last_name, @RequestParam("email") String email) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
                 databaseConnection.getUsername(),
                 databaseConnection.getPassword())) {
             int nextId = getNextId(connection);
 
-            //String insertQuery = "INSERT INTO employees(employee_id, first_name, last_name) VALUES(?, ?, ?)";
-            String insertQuery = "INSERT INTO employees(employee_id, first_name, last_name,email,phone_number,hire_date,job_id,salary,commission_pct,manager_id,department_id) VALUES(22,'And','Cie','mail',123456,'20/03/15','AD_VP',1234,null,null,null)";
-            //"INSERT INTO employees(employee_id, first_name, last_name,email,phone_number,hire_date,job_id,salary,commission_pct,manager_id,department_id)"
-            //VALUES (21,'And','Cie','mail',123456,'20/03/15','AD_VP',1234,null,null,null);
+            String insertQuery = "INSERT INTO employees(employee_id, first_name, last_name,email,phone_number,hire_date,job_id,salary,commission_pct,manager_id,department_id) VALUES(?,?,?,?,123456,'20/03/15','AD_VP',1234,null,null,null)";
+
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
                 insertStatement.setString(2, first_name);
                 insertStatement.setString(3, last_name);
-                insertStatement.executeUpdate();
-            }
-            String insertCommit = "commit";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertCommit)) {
-                insertStatement.executeUpdate();
-            }
+                insertStatement.setString(4, email);
 
+                insertStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,11 +38,10 @@ public class UserController {
     }
 
     @PostMapping("/eraseAllUsers")
-    public String deleteUser() {
+    public String deleteUsers() {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
                 databaseConnection.getUsername(),
                 databaseConnection.getPassword())) {
-            int nextId = getNextId(connection);
 
             String insertQuery = "DELETE from employees";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
@@ -61,7 +55,7 @@ public class UserController {
     }
 
     private int getNextId(Connection connection) throws SQLException {
-        String getMaxIdQuery = "SELECT MAX(id) FROM employees";
+        String getMaxIdQuery = "SELECT MAX(employee_id) FROM employees";
         try (PreparedStatement getMaxIdStatement = connection.prepareStatement(getMaxIdQuery);
              ResultSet resultSet = getMaxIdStatement.executeQuery()) {
             if (resultSet.next()) {

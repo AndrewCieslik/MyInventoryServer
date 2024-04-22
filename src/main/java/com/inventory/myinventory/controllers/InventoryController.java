@@ -14,8 +14,8 @@ public class InventoryController {
     @Autowired
     private DatabaseConnection databaseConnection;
 
-    @PostMapping("/insertGoods")
-    public String insertGoods(@RequestParam("name") String name) {
+    @PostMapping("/insertRegions")
+    public String insertRegions(@RequestParam("region") String region) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
                 databaseConnection.getUsername(),
                 databaseConnection.getPassword())) {
@@ -24,7 +24,7 @@ public class InventoryController {
             String insertQuery = "INSERT INTO regions(region_id, region_name) VALUES(?, ?)";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
-                insertStatement.setString(2, name);
+                insertStatement.setString(2, region);
                 insertStatement.executeUpdate();
             }
         } catch (SQLException e) {
