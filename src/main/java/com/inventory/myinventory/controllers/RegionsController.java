@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class InventoryController {
+public class RegionsController {
 
     @Autowired
     private DatabaseConnection databaseConnection;
@@ -36,6 +36,23 @@ public class InventoryController {
             try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                 insertStatement.setInt(1, nextId);
                 insertStatement.setString(2, region);
+                insertStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/main";
+    }
+
+    @PostMapping("/eraseAllRegions")
+    public String deleteAllRegions() {
+        try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
+                databaseConnection.getUsername(),
+                databaseConnection.getPassword())) {
+
+            String insertQuery = "DELETE from regions";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+
                 insertStatement.executeUpdate();
             }
         } catch (SQLException e) {
