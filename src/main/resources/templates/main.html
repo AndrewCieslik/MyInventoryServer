@@ -7,19 +7,6 @@
 <body>
 <h1>SBD15 - Moja baza pracowników</h1>
 
-<h2>Regions:</h2>
-<h3>Lista Regionów:</h3>
-
-<form action="/insertRegions" method="post">
-    <input type="text" name="region" placeholder="New region">
-    <button type="submit">Add new region</button>
-</form>
-
-<form action="/deleteAllRegions" method="post">
-    <button type="submit">Delete All Regions</button>
-</form>
-
-
 <h2>Pracownicy:</h2>
 <h3>Dodaj nowego pracownika: </h3>
 <form action="/insertUser" method="post">
@@ -33,18 +20,29 @@
     <button type="submit">Usuń wszystkich pracowników</button>
 </form>
 
-<!--<h2>Assign goods to the user:</h2>-->
-<!--<form action="/assignGoods" method="post">-->
-<!--    <input type="text" name="user_id" placeholder="User ID">-->
-<!--    <input type="text" name="id" placeholder="Product ID">-->
-<!--    <button type="submit">Assign material</button>-->
-<!--</form>-->
+<h3>Wyświetl dane pracownika: </h3>
 
-<!--<h2>Show items assigned to user:</h2>-->
-<!--<form action="/showAssignedItems" method="post">-->
-<!--    <input type="text" name="user_id" placeholder="User ID">-->
-<!--    <button type="submit">Show Items</button>-->
-<!--</form>-->
+
+
+
+
+<div th:if="${userData != null}">
+    <h3>Odpowiedź z serwera:</h3>
+    <p th:text="${userData}"></p>
+</div>
+
+<h2>Regions:</h2>
+<h3>Lista Regionów:</h3>
+
+<form action="/insertRegions" method="post">
+    <input type="text" name="region" placeholder="New region">
+    <button type="submit">Add new region</button>
+</form>
+
+<form action="/deleteAllRegions" method="post">
+    <button type="submit">Delete All Regions</button>
+</form>
+
 </body>
 </html>
 
