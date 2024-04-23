@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.sql.*;
 
 @Controller
@@ -63,6 +67,33 @@ public class UserController {
             } else {
                 return 1;
             }
+        }
+    }
+    @GetMapping("/getUser/{employee_id}")
+    @ResponseBody
+    public String getUser(@PathVariable("employee_id") int employee_id) {
+        try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
+                databaseConnection.getUsername(),
+                databaseConnection.getPassword())) {
+
+            String selectQuery = "SELECT first_name,last_name,email FROM employees WHERE employee_id = ?";
+            try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+                selectStatement.setInt(1, employee_id);
+
+                try (ResultSet resultSet = selectStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String first_name = resultSet.getString("first_name");
+                        String last_name = resultSet.getString("last_name");
+                        String email = resultSet.getString("email");
+                        return "First Name: " + first_name + ", Last Name: " + last_name + ", Email: " + email;
+                    } else {
+                        return "User not found";
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error occurred while fetching user";
         }
     }
 }
