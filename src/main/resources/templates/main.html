@@ -20,32 +20,35 @@
     <button type="submit">Usuń wszystkich pracowników</button>
 </form>
 
-<h3>Wyświetl dane pracownika: //getUser/100</h3>
-<!--<form action="/getUser" method="get">-->
-<!--    <label for="employee_id">Employee ID:</label>-->
-<!--    <input type="text" id="employee_id" name="id" placeholder="Enter Employee ID">-->
-<!--    <button type="submit">Get User</button>-->
-<!--</form>-->
 
-
-
-
-<div th:if="${userData != null}">
-    <h3>Odpowiedź z serwera:</h3>
-    <p th:text="${userData}"></p>
-</div>
-
-<h2>Regions:</h2>
+<h2>Regiony:</h2>
 <h3>Lista Regionów:</h3>
 
 <form action="/insertRegions" method="post">
     <input type="text" name="region" placeholder="New region">
-    <button type="submit">Add new region</button>
+    <button type="submit">Dodaj nowy region</button>
 </form>
 
 <form action="/deleteAllRegions" method="post">
-    <button type="submit">Delete All Regions</button>
+    <button type="submit">Usuń wszystkie regiony</button>
 </form>
+
+<h3>Wyświetl dane pracownika:</h3>
+<form id="employeeForm">
+    <label for="employee_id">ID pracownika:</label>
+    <input type="text" id="employee_id" name="employee_id">
+    <button type="button" onclick="getEmployee()">Wczytaj ID</button>
+</form>
+
+<div id="employeeLink"></div>
+
+<script>
+    function getEmployee() {
+        var employeeId = document.getElementById('employee_id').value;
+        var link = '/getUser/' + employeeId;
+        document.getElementById('employeeLink').innerHTML = '<button onclick="window.location.href=\'' + link + '\'">Wyświetl dane pracownika</button>';
+    }
+</script>
 
 </body>
 </html>
