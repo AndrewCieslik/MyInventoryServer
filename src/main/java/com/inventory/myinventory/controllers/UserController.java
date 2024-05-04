@@ -113,7 +113,7 @@ public class UserController {
                     if (resultSet.next()) {
                         String last_name = resultSet.getString("last_name");
                         String job_title = resultSet.getString("job_title");
-                        return "Pracownik: " + " Last Name: " + last_name + ", Email: " + job_title;
+                        return "Nazwisko pracownika: " + last_name + ", \nZajmowane stanowisko: " + job_title;
                     } else {
                         return "User not found";
                     }

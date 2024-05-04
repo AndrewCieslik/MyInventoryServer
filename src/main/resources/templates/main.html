@@ -7,7 +7,7 @@
 <body>
 <h1>SBD15 - Moja baza pracowników</h1>
 
-<h2>Pracownicy:</h2>
+<h2>#Pracownicy:</h2>
 <h3>Dodaj nowego pracownika: </h3>
 <form action="/insertUser" method="post">
     <input type="text" name="last_name" placeholder="Nazwisko">
@@ -20,8 +20,33 @@
     <button type="submit">Usuń wszystkich pracowników</button>
 </form>
 
+<h3>Wyświetl dane pracownika wg ID:</h3>
+<form id="employeeForm">
+    <label for="employee_id">ID pracownika:</label>
+    <input type="text" id="employee_id" name="employee_id"></br>
+    <button type="button" onclick="getEmployee()">Wczytaj dane personalne</button></br>
+    <button type="button" onclick="getUserTitle()">Wczytaj zajmowane stanowisko</button>
+</form>
 
-<h2>Regiony:</h2>
+<div id="employeeLink"></div>
+
+<script>
+    function getEmployee() {
+        var employeeId = document.getElementById('employee_id').value;
+        var link = '/getUser/' + employeeId;
+        document.getElementById('employeeLink').innerHTML = '<button onclick="window.location.href=\'' + link + '\'">Dalej</button>';
+    }
+    function getUserTitle() {
+        var employeeId = document.getElementById('employee_id').value;
+        var link = '/getUserTitle/' + employeeId;
+        document.getElementById('employeeLink').innerHTML = '<button onclick="window.location.href=\'' + link + '\'">Dalej</button>';
+    }
+</script>
+
+<p>Tablica wszystkich pracowników: <a href="/employees">tutaj</a></p>
+
+
+<h2>#Regiony:</h2>
 <h3>Lista Regionów:</h3>
 
 <form action="/insertRegions" method="post">
@@ -32,23 +57,6 @@
 <form action="/deleteAllRegions" method="post">
     <button type="submit">Usuń wszystkie regiony</button>
 </form>
-
-<h2>Wyświetl dane pracownika wg ID:</h2>
-<form id="employeeForm">
-    <label for="employee_id">ID pracownika:</label>
-    <input type="text" id="employee_id" name="employee_id">
-    <button type="button" onclick="getEmployee()">Wczytaj ID</button>
-</form>
-
-<div id="employeeLink"></div>
-
-<script>
-    function getEmployee() {
-        var employeeId = document.getElementById('employee_id').value;
-        var link = '/getUser/' + employeeId;
-        document.getElementById('employeeLink').innerHTML = '<button onclick="window.location.href=\'' + link + '\'">Wyświetl dane pracownika</button>';
-    }
-</script>
 
 </body>
 </html>
