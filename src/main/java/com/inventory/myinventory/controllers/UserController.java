@@ -97,4 +97,31 @@ public class UserController {
             return "Error occurred while fetching user";
         }
     }
+
+    @GetMapping("/getUserTitle/{employee_id}")
+    @ResponseBody
+    public String getUserTitle(@PathVariable("employee_id") int employee_id) {
+        try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
+                databaseConnection.getUsername(),
+                databaseConnection.getPassword())) {
+
+            String selectQuery = "SELECT employee_id, e.last_name, j.job_title FROM employees e INNER JOIN jobs j ON e.job_id = j.job_id WHERE employee_id = ?";
+            try (PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+                selectStatement.setInt(1, employee_id);
+
+                try (ResultSet resultSet = selectStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String last_name = resultSet.getString("last_name");
+                        String job_title = resultSet.getString("job_title");
+                        return "Pracownik: " + " Last Name: " + last_name + ", Email: " + job_title;
+                    } else {
+                        return "User not found";
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error occurred while fetching user";
+        }
+    }
 }
