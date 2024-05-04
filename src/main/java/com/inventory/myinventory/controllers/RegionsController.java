@@ -18,13 +18,6 @@ public class RegionsController {
     @Autowired
     private DatabaseConnection databaseConnection;
 
-    @GetMapping("/main")
-    public String showMainPage(Model model) {
-        List<String> regions = fetchRegions();
-        model.addAttribute("regions", regions);
-        return "main";
-    }
-
     @PostMapping("/insertRegions")
     public String insertRegions(@RequestParam("region") String region) {
         try (Connection connection = DriverManager.getConnection(databaseConnection.getUrl(),
